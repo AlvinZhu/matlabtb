@@ -34,7 +34,7 @@ example.py:
 - [Piotr's Computer Vision Matlab Toolbox](https://github.com/pdollar/toolbox)
 - [John W. Ratcliff's sse2neon](https://github.com/jratcliff63367/sse2neon)
 
-##Features
+## Features
 - Added support for ARM's NEON instruction set(Tested on Nvidia Jetson).
 
 
