@@ -59,13 +59,51 @@ imResample(PyObject *dummy, PyObject *args) {
     return Py_None;
 }
 
+/* ==== Set up the methods table ====================== */
 static struct PyMethodDef methods[] = {
         {"imResample", imResample, METH_VARARGS, "resample A using bilinear interpolation and and store result in B"},
         {NULL, NULL, 0, NULL}
 };
 
+#if PY_MAJOR_VERSION >= 3
+
+static struct PyModuleDef moduledef = {
+       PyModuleDef_HEAD_INIT,
+       "matlabtb",
+       "Implementation of PioTr Toolbox imResample in Python",
+       NULL,
+       methods,
+       NULL,
+       NULL,
+       NULL,
+       NULL
+};
+
+#define INITERROR return NULL
+
 PyMODINIT_FUNC
-initmatlabtb(void) {
-    (void) Py_InitModule("matlabtb", methods);
-    import_array();
+PyInit_matlabtb(void)
+
+#else
+#define INITERROR return
+
+PyMODINIT_FUNC
+initmatlabtb(void)
+#endif
+{
+#if PY_MAJOR_VERSION >= 3
+    	PyObject *module = PyModule_Create(&moduledef);
+#else	
+	 PyObject *module = Py_InitModule("matlabtb", methods);
+#endif
+    if (module == NULL)
+        INITERROR;
+
+    PyModule_AddStringConstant(module, "__author__", "Shashikant Ghangare <shashikant.ghangare@outlook.in>");
+    PyModule_AddStringConstant(module, "__version__", "2");
+    import_array();  // Must be present for NumPy.  Called first after above line.
+#if PY_MAJOR_VERSION >= 3
+    return module;
+#endif
 }
+
